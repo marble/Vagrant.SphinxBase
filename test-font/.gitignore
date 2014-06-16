@@ -1,0 +1,8 @@
+# this is file .gitignore
+
+# ignore everything in this directory
+*
+
+# but do not ignore these
+!.gitignore
+!test-font.tex
