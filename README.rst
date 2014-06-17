@@ -1,7 +1,14 @@
+.. coding: utf-8  ÄÖÜäöüß
+
+========================================================================
 Vagrant.SphinxBase
-==================
+========================================================================
 
 .. attention:: This README.rst ist work in progress. It is still very incomplete.
+
+:Author: Martin Bless
+:Email:  martin.bless@typo3.org
+
 
 Purpose
 -------
