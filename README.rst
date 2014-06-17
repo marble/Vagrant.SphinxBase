@@ -28,7 +28,13 @@ It is assumed that you have Virtualbox and Vagrant on your system.
 
       vagrant up 2>&1 | tee logfiles/vagrant-up.log.txt
 
-   Afterwards you may check the logfile. Look for '###' to find major steps.
+   Afterwards you may check the logfile. Look for ``###`` to identify major steps.
+
+#. Recommended way to update an existing machine::
+
+      vagrant reload --provision 2>&1 | tee logfiles/vagrant-reload.log.txt
+
+   Afterwards you may check the logfile. Look for ``###`` to identify major steps.
 
 
 What does it do?
