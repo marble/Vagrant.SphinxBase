@@ -204,14 +204,6 @@ sudo python _mapping.py
 
 ls -1 /usr/local/bin >/vagrant/logfiles/new-commands-in-usr-local-bin.txt
 
-if [ ! -e "${homedir}/apt-archives-exported" ] && [ -e "/vagrant/var-cache-apt-archives/.gitignore" ]; then
-   # to save bandwidth at the T3DD14 save cached Debian packages to external folder
-   echo ""; echo "###"; echo "# Save /var/cache/apt/archives"; echo "#"
-   sudo cp /var/cache/apt/archives/*.deb  /vagrant/var-cache-apt-archives/
-   touch "${homedir}/apt-archives-exported"
-fi
-
-
 # ########################################
 # Let's try an example HTML build.
 # ########################################
@@ -302,6 +294,17 @@ make latexpdf
 cd /vagrant/DocumentationProjects/${example_project}/Documentation/_make/build/latex
 
 ls -la | grep .pdf
+
+# ########################################
+# export cached debian packages
+# ########################################
+
+if [ ! -e "${homedir}/apt-archives-exported" ] && [ -e "/vagrant/var-cache-apt-archives/.gitignore" ]; then
+   # to save bandwidth at the T3DD14 save cached Debian packages to external folder
+   echo ""; echo "###"; echo "# Save /var/cache/apt/archives"; echo "#"
+   sudo cp /var/cache/apt/archives/*.deb  /vagrant/var-cache-apt-archives/
+   touch "${homedir}/apt-archives-exported"
+fi
 
 echo ""; echo "###"; echo "# End of provision.sh"; echo "#"
 
