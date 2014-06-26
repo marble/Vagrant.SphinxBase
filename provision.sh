@@ -5,6 +5,17 @@ echo ""; echo "###"; echo "# Start of provision.sh"; echo "#"
 # define parameters
 homedir=/home/vagrant
 template_make_folder=/vagrant/Templates/ExampleProject/Documentation/_make
+tmp=/vagrant/tmp
+
+mkdir -p $tmp >/dev/null 2>&1
+mkdir -p $tmp/DocumentationProjects >/dev/null 2>&1
+mkdir -p $tmp/Downloads >/dev/null 2>&1
+
+if [ ! -e $tmp/.gitignore ]; then
+	cp /vagrant/Templates/template-ignore-all.gitignore $tmp/.gitignore
+fi
+
+whoami >$tmp/whoami.log.txt
 
 # This project should be configured for latexpdf generation in ${example_project}/Documentation/Settings.yml
 example_project=TyposcriptReference
@@ -50,10 +61,10 @@ echo ""; echo "###"; echo "# Install the Python packet manager pip"; echo "#"
 # this Google search: https://www.google.de/search?q=get-pip.py
 
 # Download get-pip.py:
-curl --silent https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py -o /vagrant/Downloads/get-pip.py
+curl --silent https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py -o $tmp/Downloads/get-pip.py
 
 # Globally install the Python packet manager 'pip':
-sudo python /vagrant/Downloads/get-pip.py
+sudo python $tmp/Downloads/get-pip.py
 
 # Globally install the Python yaml package:
 echo ""; echo "###"; echo "# Install Yaml for Python"; echo "#"
@@ -88,7 +99,7 @@ echo ""; echo "###"; echo "# Install sphinxcontrib extensions for Sphinx"; echo 
 #
 
 # garantee that the file is empty
-rm /vagrant/tmp/sphinxcontrib_settings.sh >/dev/null 2>&1
+rm $tmp/sphinxcontrib_settings.sh >/dev/null 2>&1
 touch /vagrant/tmp/sphinxcontrib_settings.sh
 
 # either write correct data or write nothing
@@ -102,76 +113,76 @@ sphinxcontrib_unpackfolder=
 source /vagrant/tmp/sphinxcontrib_settings.sh
 
 # start with an empty download folder for sphinxcontrib
-rm -rf /vagrant/Downloads/sphinxcontrib  >/dev/null 2>&1
-mkdir -p /vagrant/Downloads/sphinxcontrib >/dev/null 2>&1
+rm -rf $tmp/Downloads/sphinxcontrib  >/dev/null 2>&1
+mkdir -p $tmp/Downloads/sphinxcontrib >/dev/null 2>&1
 
 # download and unpack the zip archive with the sphinxcontrib plugins
-curl --silent $sphinxcontrib_zip_url -o /vagrant/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}.zip
-unzip /vagrant/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}.zip -d /vagrant/Downloads/sphinxcontrib/
+curl --silent $sphinxcontrib_zip_url -o $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}.zip
+unzip $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}.zip -d $tmp/Downloads/sphinxcontrib/
 
 # globally install the Sphinx plugins that are available on docs.typo3.org too
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-googlechart"; echo "#"
 plugin=googlechart
-cd /vagrant/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
+cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
 sudo python setup.py clean
 sudo python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-googlemaps"; echo "#"
 plugin=googlemaps
-cd /vagrant/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
+cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
 sudo python setup.py clean
 sudo python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-httpdomain"; echo "#"
 plugin=httpdomain
-cd /vagrant/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
+cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
 sudo python setup.py clean
 sudo python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-numfig"; echo "#"
 plugin=numfig
-cd /vagrant/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
+cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
 sudo python setup.py clean
 sudo python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-slide"; echo "#"
 plugin=slide
-cd /vagrant/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
+cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
 sudo python setup.py clean
 sudo python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-youtube"; echo "#"
 plugin=youtube
-cd /vagrant/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
+cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
 sudo python setup.py clean
 sudo python setup.py install
 
 
 # Download the TYPO3 ReStructuredText tools and install the 't3sphinx' Python package
 echo ""; echo "###"; echo "# Install RestTools/ExtendingSphinxForTYPO3"; echo "#"
-if [ ! -d /vagrant/Repositories/git.typo3.org/Documentation/RestTools ]; then
-   git clone git://git.typo3.org/Documentation/RestTools.git /vagrant/Repositories/git.typo3.org/Documentation/RestTools
+if [ ! -d $tmp/Repositories/git.typo3.org/Documentation/RestTools ]; then
+   git clone git://git.typo3.org/Documentation/RestTools.git $tmp/Repositories/git.typo3.org/Documentation/RestTools
 fi
-cd /vagrant/Repositories/git.typo3.org/Documentation/RestTools
+cd $tmp/Repositories/git.typo3.org/Documentation/RestTools
 git pull
 
 # this is the traditional but buggy version from 2011
-cd /vagrant/Repositories/git.typo3.org/Documentation/RestTools/ExtendingSphinxForTYPO3
+cd $tmp/Repositories/git.typo3.org/Documentation/RestTools/ExtendingSphinxForTYPO3
 # sudo python setup.py install
 # sudo chown -R vagrant:vagrant .
 
 
 # Download the new (~2014-06-16) ExtendingSphinxForTYPO3 '3sphinx' Python package from github 
 echo ""; echo "###"; echo "# Install ExtendingSphinxForTYPO3 (github version)"; echo "#"
-if [ ! -d /vagrant/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3 ]; then
-   git clone https://github.com/marble/typo3-ExtendingSphinxForTYPO3.git /vagrant/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3
+if [ ! -d $tmp/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3 ]; then
+   git clone https://github.com/marble/typo3-ExtendingSphinxForTYPO3.git $tmp/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3
 fi
-cd /vagrant/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3
+cd $tmp/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3
 git pull
 
 # let's use the improved version from github
-cd /vagrant/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3
+cd $tmp/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3
 sudo python setup.py install
 sudo chown -R vagrant:vagrant .
  
@@ -181,7 +192,7 @@ sudo chown -R vagrant:vagrant .
 # mapping by running _mapping.py itself in that directory.
 echo ""; echo "###"; echo "# Install typoscript highlighting for pygments"; echo "#"
 destdir=`python -c "import pygments, os; print os.path.join(os.path.dirname(pygments.__file__),'lexers')"`
-sudo cp /vagrant/Repositories/git.typo3.org/Documentation/RestTools/ExtendingPygmentsForTYPO3/_incoming/typoscript.py $destdir
+sudo cp $tmp/Repositories/git.typo3.org/Documentation/RestTools/ExtendingPygmentsForTYPO3/_incoming/typoscript.py $destdir
 cd $destdir
 sudo python _mapping.py
 
@@ -249,12 +260,12 @@ sudo apt-get install -qy texlive-fonts-extra
  
 # Install the TYPO3 'share' font:
 echo ""; echo "###"; echo "# Install share font from RestTools/LaTeX/font"; echo "#"
-cd /vagrant/Repositories/git.typo3.org/Documentation/RestTools/LaTeX/font
+cd $tmp/Repositories/git.typo3.org/Documentation/RestTools/LaTeX/font
 sudo ./convert-share.sh
  
 # Make the TYPO3 logo known to TeX. Copy files without subdirs:
 echo ""; echo "###"; echo "# Provide TYPO3 logo for tex"; echo "#"
-sudo cp /vagrant/Repositories/git.typo3.org/Documentation/RestTools/LaTeX/* /usr/local/share/texmf/tex/latex/typo3
+sudo cp $tmp/Repositories/git.typo3.org/Documentation/RestTools/LaTeX/* /usr/local/share/texmf/tex/latex/typo3
 
 echo ""; echo "###"; echo "# Update information about the ./texmf configuration hierarchy"; echo "#"
 sudo texhash
