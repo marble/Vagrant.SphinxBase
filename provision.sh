@@ -17,19 +17,6 @@ example_project_url=http://git.typo3.org/TYPO3CMS/Extensions/sphinx.git
 # Let's generally work in the home dir:
 cd ${homedir}
 
-if [ ! -e "${homedir}/apt-archives-initialized" ] && [ -e "/vagrant/var-cache-apt-archives/.gitignore" ]; then
-   # to save bandwidth (at the T3DD14) smuggle preloaded Debian packages into the system
-   echo ""; echo "###"; echo "# Smuggle preloaded Debian packages to /var/cache/apt/archives"; echo "#"
-   sudo cp /vagrant/var-cache-apt-archives/*.deb /var/cache/apt/archives/
-   sudo apt-cache gencaches
-   touch "${homedir}/apt-archives-initialized"
-fi
-
-# start with a clean tempdata folder
-echo ""; echo "###"; echo "# Empty /vagrant/tempdata"; echo "#"
-mkdir /vagrant/tempdata >/dev/null 2>&1
-rm -rf /vagrant/tempdata/*
-
 # Update packet information:
 echo ""; echo "###"; echo "# Update packet lists"; echo "#"
 sudo apt-get update
@@ -101,18 +88,18 @@ echo ""; echo "###"; echo "# Install sphinxcontrib extensions for Sphinx"; echo 
 #
 
 # garantee that the file is empty
-rm /vagrant/tempdata/sphinxcontrib_settings.sh >/dev/null 2>&1
-touch /vagrant/tempdata/sphinxcontrib_settings.sh
+rm /vagrant/tmp/sphinxcontrib_settings.sh >/dev/null 2>&1
+touch /vagrant/tmp/sphinxcontrib_settings.sh
 
 # either write correct data or write nothing
-python /vagrant/Scripts/handle_sphinxcontrib.py >/vagrant/tempdata/sphinxcontrib_settings.sh
+python /vagrant/Scripts/handle_sphinxcontrib.py >/vagrant/tmp/sphinxcontrib_settings.sh
 
 sphinxcontrib_zip_url=
 sphinxcontrib_hash=
 sphinxcontrib_unpackfolder=
 
 # define the settings
-source /vagrant/tempdata/sphinxcontrib_settings.sh
+source /vagrant/tmp/sphinxcontrib_settings.sh
 
 # start with an empty download folder for sphinxcontrib
 rm -rf /vagrant/Downloads/sphinxcontrib  >/dev/null 2>&1
@@ -294,17 +281,6 @@ make latexpdf
 cd /vagrant/DocumentationProjects/${example_project}/Documentation/_make/build/latex
 
 ls -la | grep .pdf
-
-# ########################################
-# export cached debian packages
-# ########################################
-
-if [ ! -e "${homedir}/apt-archives-exported" ] && [ -e "/vagrant/var-cache-apt-archives/.gitignore" ]; then
-   # to save bandwidth at the T3DD14 save cached Debian packages to external folder
-   echo ""; echo "###"; echo "# Save /var/cache/apt/archives"; echo "#"
-   sudo cp /var/cache/apt/archives/*.deb  /vagrant/var-cache-apt-archives/
-   touch "${homedir}/apt-archives-exported"
-fi
 
 echo ""; echo "###"; echo "# End of provision.sh"; echo "#"
 
