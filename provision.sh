@@ -274,9 +274,11 @@ texhash
 # test-font: verify that font 'share' is available
 # ########################################
 
-if [ -e "/vagrant/test-font/test-font.tex" ] && [ ! -e "/vagrant/test-font/test-font.pdf" ]; then
+if [ -e "$tmp/test-font/test-font.tex" ] && [ ! -e "$tmp/test-font/test-font.pdf" ]; then
    echo ""; echo "###"; echo "# Do 'pdflatex test-font.tex"; echo "#"
-   cd /vagrant/test-font
+   rm -r $tmp/test-font
+   cp -r /vagrant/test-font $tmp/test-font
+   cd $tmp/test-font
    pdflatex test-font.tex
 fi
 
