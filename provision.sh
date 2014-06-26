@@ -30,27 +30,27 @@ cd ${homedir}
 
 # Update packet information:
 echo ""; echo "###"; echo "# Update packet lists"; echo "#"
-sudo apt-get update
+apt-get update
 
 # python2.7 will already be there. But let's ensure this anyway:
 echo ""; echo "###"; echo "# Install Python"; echo "#"
-sudo apt-get install -qy python
+apt-get install -qy python
 
 # Provide Python imaging library:
 echo ""; echo "###"; echo "# Install python-imaging"; echo "#"
-sudo apt-get install -qy python-imaging
+apt-get install -qy python-imaging
 
 # Install curl:
 echo ""; echo "###"; echo "# Install curl"; echo "#"
-sudo apt-get install -qy curl
+apt-get install -qy curl
 
 # Install git:
 echo ""; echo "###"; echo "# Install git"; echo "#"
-sudo apt-get install -qy git
+apt-get install -qy git
 
 # Install unzip:
 echo ""; echo "###"; echo "# Install unzip"; echo "#"
-sudo apt-get install -qy unzip
+apt-get install -qy unzip
 
 # Install pip
 echo ""; echo "###"; echo "# Install the Python packet manager pip"; echo "#"
@@ -64,21 +64,21 @@ echo ""; echo "###"; echo "# Install the Python packet manager pip"; echo "#"
 curl --silent https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py -o $tmp/Downloads/get-pip.py
 
 # Globally install the Python packet manager 'pip':
-sudo python $tmp/Downloads/get-pip.py
+python $tmp/Downloads/get-pip.py
 
 # Globally install the Python yaml package:
 echo ""; echo "###"; echo "# Install Yaml for Python"; echo "#"
-# sudo pip install pyyaml
-sudo apt-get install -qy python-yaml
+# pip install pyyaml
+apt-get install -qy python-yaml
 
 # Globally install the python-markupsafe package:
 echo ""; echo "###"; echo "# Install markupsafe for Python"; echo "#"
-# sudo pip install pyyaml
-sudo apt-get install -qy python-markupsafe
+# pip install pyyaml
+apt-get install -qy python-markupsafe
 
 # Globally install Sphinx and everything that's needed for this:
 echo ""; echo "###"; echo "# Install Sphinx for Python (sphinx)"; echo "#"
-sudo pip install sphinx
+pip install sphinx
 
 # ##########
 # handle sphinxcontrib packages
@@ -87,12 +87,12 @@ echo ""; echo "###"; echo "# Install sphinxcontrib extensions for Sphinx"; echo 
 
 # We would like to do these installs:
 #
-# sudo pip install sphinxcontrib-googlechart
-# sudo pip install sphinxcontrib-googlemaps
-# sudo pip install sphinxcontrib-httpdomain
-# sudo pip install sphinxcontrib-numfig
-# sudo pip install sphinxcontrib-slide
-# sudo pip install sphinxcontrib-youtube
+# pip install sphinxcontrib-googlechart
+# pip install sphinxcontrib-googlemaps
+# pip install sphinxcontrib-httpdomain
+# pip install sphinxcontrib-numfig
+# pip install sphinxcontrib-slide
+# pip install sphinxcontrib-youtube
 #
 # But for security reasons we only trust the Sphinx extensions from 
 # https://bitbucket.org/xperseguers/sphinx-contrib/downloads
@@ -125,38 +125,38 @@ unzip $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}.zip -d $tmp/Dow
 echo ""; echo "###"; echo "# Install sphinxcontrib-googlechart"; echo "#"
 plugin=googlechart
 cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
-sudo python setup.py clean
-sudo python setup.py install
+python setup.py clean
+python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-googlemaps"; echo "#"
 plugin=googlemaps
 cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
-sudo python setup.py clean
-sudo python setup.py install
+python setup.py clean
+python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-httpdomain"; echo "#"
 plugin=httpdomain
 cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
-sudo python setup.py clean
-sudo python setup.py install
+python setup.py clean
+python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-numfig"; echo "#"
 plugin=numfig
 cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
-sudo python setup.py clean
-sudo python setup.py install
+python setup.py clean
+python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-slide"; echo "#"
 plugin=slide
 cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
-sudo python setup.py clean
-sudo python setup.py install
+python setup.py clean
+python setup.py install
 
 echo ""; echo "###"; echo "# Install sphinxcontrib-youtube"; echo "#"
 plugin=youtube
 cd $tmp/Downloads/sphinxcontrib/${sphinxcontrib_unpackfolder}/$plugin
-sudo python setup.py clean
-sudo python setup.py install
+python setup.py clean
+python setup.py install
 
 
 # Download the TYPO3 ReStructuredText tools and install the 't3sphinx' Python package
@@ -169,8 +169,8 @@ git pull
 
 # this is the traditional but buggy version from 2011
 cd $tmp/Repositories/git.typo3.org/Documentation/RestTools/ExtendingSphinxForTYPO3
-# sudo python setup.py install
-# sudo chown -R vagrant:vagrant .
+# python setup.py install
+# chown -R vagrant:vagrant .
 
 
 # Download the new (~2014-06-16) ExtendingSphinxForTYPO3 '3sphinx' Python package from github 
@@ -183,8 +183,8 @@ git pull
 
 # let's use the improved version from github
 cd $tmp/Repositories/github.com/marble/typo3-ExtendingSphinxForTYPO3
-sudo python setup.py install
-sudo chown -R vagrant:vagrant .
+python setup.py install
+chown -R vagrant:vagrant .
  
 # The syntax highlighter 'pygments' should have been install by Sphinx.
 # Now add syntax highlighting for TypoScript. To do this we need to copy
@@ -192,9 +192,9 @@ sudo chown -R vagrant:vagrant .
 # mapping by running _mapping.py itself in that directory.
 echo ""; echo "###"; echo "# Install typoscript highlighting for pygments"; echo "#"
 destdir=`python -c "import pygments, os; print os.path.join(os.path.dirname(pygments.__file__),'lexers')"`
-sudo cp $tmp/Repositories/git.typo3.org/Documentation/RestTools/ExtendingPygmentsForTYPO3/_incoming/typoscript.py $destdir
+cp $tmp/Repositories/git.typo3.org/Documentation/RestTools/ExtendingPygmentsForTYPO3/_incoming/typoscript.py $destdir
 cd $destdir
-sudo python _mapping.py
+python _mapping.py
 
 # Our system is now ready to handle Sphinx projects. Moreover, the
 # TYPO3 specific additions have been install so we have TYPO3 specific
@@ -211,25 +211,25 @@ ls -1 /usr/local/bin >/vagrant/logfiles/new-commands-in-usr-local-bin.txt
 # serves the only purpose to ease offline building "at home".
 
 echo ""; echo "###"; echo "# Fetch example project"; echo "#"
-if [ ! -d /vagrant/DocumentationProjects/${example_project} ]; then
-    git clone ${example_project_url} /vagrant/DocumentationProjects/${example_project}
+if [ ! -d $tmp/DocumentationProjects/${example_project} ]; then
+    git clone ${example_project_url} $tmp/DocumentationProjects/${example_project}
 fi
-cd /vagrant/DocumentationProjects/${example_project}
+cd $tmp/DocumentationProjects/${example_project}
 git pull
 
 # make sure there is the Project/Documentation/_make folder
-if [ ! -d "/vagrant/DocumentationProjects/${example_project}/Documentation/_make" ]; then
+if [ ! -d "$tmp/DocumentationProjects/${example_project}/Documentation/_make" ]; then
   echo ""; echo "###"; echo "# Copy generic _make folder to example project '${example_project}'"; echo "#"
-  cp -r "${template_make_folder}" "/vagrant/DocumentationProjects/${example_project}/Documentation"
+  cp -r "${template_make_folder}" "$tmp/DocumentationProjects/${example_project}/Documentation"
 fi
 
 # make the HTML version (TYPO3)
 echo ""; echo "###"; echo "# Run 'make t3html' for example project"; echo "#"
-cd /vagrant/DocumentationProjects/${example_project}/Documentation/_make
+cd $tmp/DocumentationProjects/${example_project}/Documentation/_make
 make t3html
 
 # Find the result 'Index.html' here:
-cd /vagrant/DocumentationProjects/${example_project}/Documentation/_make/build/t3html
+cd $tmp/DocumentationProjects/${example_project}/Documentation/_make/build/t3html
 
 
 # ########################################
@@ -240,35 +240,35 @@ cd /vagrant/DocumentationProjects/${example_project}/Documentation/_make/build/t
 
 # Install texlive-base (~143 MB):
 echo ""; echo "###"; echo "# Install texlive-base"; echo "#"
-sudo apt-get install -qy texlive-base
+apt-get install -qy texlive-base
 
 # Install texlive-latex-recommended (~284 MB):
 echo ""; echo "###"; echo "# Install texlive-latex-recommended"; echo "#"
-sudo apt-get install -qy texlive-latex-recommended
+apt-get install -qy texlive-latex-recommended
 
 # Install texlive-latex-extra (~558 MB):
 echo ""; echo "###"; echo "# Install texlive-latex-extra"; echo "#"
-sudo apt-get install -qy texlive-latex-extra
+apt-get install -qy texlive-latex-extra
 
 # Install texlive-fonts-recommended (~61 MB):
 echo ""; echo "###"; echo "# Install texlive-fonts-recommended"; echo "#"
-sudo apt-get install -qy texlive-fonts-recommended
+apt-get install -qy texlive-fonts-recommended
 
 # Install texlive-fonts-extra (~571 MB):
 echo ""; echo "###"; echo "# Install texlive-fonts-extra"; echo "#"
-sudo apt-get install -qy texlive-fonts-extra
+apt-get install -qy texlive-fonts-extra
  
 # Install the TYPO3 'share' font:
 echo ""; echo "###"; echo "# Install share font from RestTools/LaTeX/font"; echo "#"
 cd $tmp/Repositories/git.typo3.org/Documentation/RestTools/LaTeX/font
-sudo ./convert-share.sh
+./convert-share.sh
  
 # Make the TYPO3 logo known to TeX. Copy files without subdirs:
 echo ""; echo "###"; echo "# Provide TYPO3 logo for tex"; echo "#"
-sudo cp $tmp/Repositories/git.typo3.org/Documentation/RestTools/LaTeX/* /usr/local/share/texmf/tex/latex/typo3
+cp $tmp/Repositories/git.typo3.org/Documentation/RestTools/LaTeX/* /usr/local/share/texmf/tex/latex/typo3
 
 echo ""; echo "###"; echo "# Update information about the ./texmf configuration hierarchy"; echo "#"
-sudo texhash
+texhash
 
 # ########################################
 # test-font: verify that font 'share' is available
@@ -285,11 +285,11 @@ fi
 # ########################################
  
 echo ""; echo "###"; echo "# Run 'make latexpdf' for example project"; echo "#"
-cd /vagrant/DocumentationProjects/${example_project}/Documentation/_make
+cd $tmp/DocumentationProjects/${example_project}/Documentation/_make
 make latexpdf
 
 # Find the result here:
-cd /vagrant/DocumentationProjects/${example_project}/Documentation/_make/build/latex
+cd $tmp/DocumentationProjects/${example_project}/Documentation/_make/build/latex
 
 ls -la | grep .pdf
 
